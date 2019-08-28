@@ -2,6 +2,7 @@ import cv2
 import time
 from face_detection import detection
 from make_rectangle import make
+from face_emotions import main
 
 
 class Main:
@@ -60,6 +61,10 @@ class Main:
                 # print(x, y, w, h)
                 if face_list[0][0] > x and face_list[0][1] > y and face_list[0][2] + face_list[0][0] < w \
                         and face_list[0][3] + face_list[0][1] < h:
+                    file = "image_data/image.jpg"
+                    cv2.imwrite(file, img2)
+                    main()
+
                     self.face_flag = True
 
             # Frame
