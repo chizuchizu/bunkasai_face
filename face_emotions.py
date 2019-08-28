@@ -13,7 +13,7 @@ config = tf.ConfigProto(
 )
 set_session(tf.Session(config=config))
 
-target_cmotions = ["anger", "happiness"]  # ナチュラル、怒り、嬉しい
+target_cmotions = ["anger", "happiness"]  # 怒り、嬉しい
 model = FERModel(target_cmotions, verbose=True)
 file = "image_data/image.jpg"
 

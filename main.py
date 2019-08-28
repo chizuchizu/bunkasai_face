@@ -60,9 +60,13 @@ class Main:
         self.count = -1
         self.interval = 0
 
+        self.score = 0
+
     def loop(self):
+        ps = 40
         while self.end_flag:
             # 画像の取得と顔の検出
+            self.score = round(self.score, 1)
             img2 = self.c_frame
             if self.face_flag:
                 self.rec = make(self.height, self.width)
@@ -70,16 +74,19 @@ class Main:
                 self.interval = time.time() - self.last
                 self.last = time.time()
                 self.count += 1
+                self.score += round(self.interval * (ps - 40), 1)
+                print(self.score)
 
             x, y, w, h = self.rec[0], self.rec[1], self.rec[2], self.rec[3]
             img3, face_list = detection(img2, self.cascade)
             cv2.rectangle(img2, (x, y), (w, h), (0, 200, 225), thickness=3)
 
             cv2.putText(img3,
-                        "{0: .2f}sec {1}count {2}".format(self.interval, self.count, self.odai_list[self.odai_id]),
-                        (20, 60),
+                        "{0: .2f}sec {1}count {2} SCORE:{3}".format(self.interval, self.count,
+                                                                    self.odai_list[self.odai_id], self.score),
+                        (20, 40),
                         fontFace=cv2.FONT_HERSHEY_COMPLEX,
-                        fontScale=1, color=(0, 0, 0), thickness=2, lineType=cv2.LINE_4)
+                        fontScale=0.8, color=(0, 0, 0), thickness=2, lineType=cv2.LINE_4)
             # print(face_list)
             if len(face_list) != 0:
                 # print(x, y, w, h)
