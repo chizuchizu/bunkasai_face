@@ -1,8 +1,25 @@
 import cv2
 import time
+import random
+import numpy as np
 from face_detection import detection
 from make_rectangle import make
 from face_emotions import main
+
+"""
+/home/username/anaconda3/envs/deep36/lib/python3.6/site-packages/EmoPy/src/fermodel.py
+60行目
+        # self._print_prediction(prediction[0]) # past
+        memo = self._print_prediction(prediction[0])  # add
+        return memo  # add
+60行目をコメントアウトし、後ろの2行を追加。
+
+113行目に
+        return [str(dominant_emotion), normalized_prediction[self.emotion_map[emotion]] * 100]
+を追加。
+
+実行結果が返ってくるように改良した。
+"""
 
 
 class Main:
@@ -10,6 +27,12 @@ class Main:
         self.ESC_KEY = 27
         self.INTERVAL = 33
         self.time_limit = 10
+
+        self.odai_idx = [0, 1]
+        self.odai_pred = ["happiness", "anger"]
+        self.odai_list = ["Happy", "Angry"]
+        self.odai_id = random.choice(self.odai_idx)
+        # self.odai = random.choice(self.odai_list)
 
         self.ORG_WINDOW_NAME = "org"
         self.DEVICE_ID = 0
@@ -52,20 +75,28 @@ class Main:
             img3, face_list = detection(img2, self.cascade)
             cv2.rectangle(img2, (x, y), (w, h), (0, 200, 225), thickness=3)
 
-            cv2.putText(img3, "{0: .2f}sec {1}count".format(self.interval, self.count), (20, 60),
+            cv2.putText(img3,
+                        "{0: .2f}sec {1}count {2}".format(self.interval, self.count, self.odai_list[self.odai_id]),
+                        (20, 60),
                         fontFace=cv2.FONT_HERSHEY_COMPLEX,
-                        fontScale=2, color=(0, 0, 0), thickness=6, lineType=cv2.LINE_4)
-
+                        fontScale=1, color=(0, 0, 0), thickness=2, lineType=cv2.LINE_4)
             # print(face_list)
             if len(face_list) != 0:
                 # print(x, y, w, h)
                 if face_list[0][0] > x and face_list[0][1] > y and face_list[0][2] + face_list[0][0] < w \
                         and face_list[0][3] + face_list[0][1] < h:
-                    file = "image_data/image.jpg"
-                    cv2.imwrite(file, img2)
-                    main()
 
-                    self.face_flag = True
+                    file = "image_data/image.jpg"
+                    # print(np.array(img2).shape)
+                    save = np.array(img2)[face_list[0][1]:face_list[0][1] + face_list[0][3],
+                           face_list[0][0]:face_list[0][0] + face_list[0][2], :]
+                    # print(save.shape)
+                    cv2.imwrite(file, save)
+                    predict, ps = main()
+                    if self.odai_pred[self.odai_id] == predict:
+                        self.face_flag = True
+                        self.odai_id = random.choice(self.odai_idx)
+                        # self.odai = self.odai_list[self.odai_id]
 
             # Frame
             cv2.imshow(self.ORG_WINDOW_NAME, img3)
