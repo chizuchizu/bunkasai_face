@@ -26,11 +26,11 @@ class Main:
     def __init__(self):
         self.ESC_KEY = 27
         self.INTERVAL = 33
-        self.time_limit = 10
+        self.time_limit = 60
 
         self.odai_idx = [0, 1]
-        self.odai_pred = ["happiness", "anger"]
-        self.odai_list = ["Happy", "Angry"]
+        self.odai_pred = ['anger', 'happiness']
+        self.odai_list = ["Angry", "Happy"]
         self.odai_id = random.choice(self.odai_idx)
         # self.odai = random.choice(self.odai_list)
 
@@ -78,15 +78,10 @@ class Main:
                 print(self.score)
 
             x, y, w, h = self.rec[0], self.rec[1], self.rec[2], self.rec[3]
+            color = (0, 255, 255)if self.odai_id != 0 else (128, 128, 128)
             img3, face_list = detection(img2, self.cascade)
-            cv2.rectangle(img2, (x, y), (w, h), (0, 200, 225), thickness=3)
 
-            cv2.putText(img3,
-                        "{0: .2f}sec {1}count {2} SCORE:{3}".format(self.interval, self.count,
-                                                                    self.odai_list[self.odai_id], self.score),
-                        (20, 40),
-                        fontFace=cv2.FONT_HERSHEY_COMPLEX,
-                        fontScale=0.8, color=(0, 0, 0), thickness=2, lineType=cv2.LINE_4)
+            cv2.rectangle(img2, (x, y), (w, h), color, thickness=3)
             # print(face_list)
             if len(face_list) != 0:
                 # print(x, y, w, h)
@@ -105,6 +100,15 @@ class Main:
                         self.odai_id = random.choice(self.odai_idx)
                         # self.odai = self.odai_list[self.odai_id]
 
+            img3 = cv2.flip(img3, 1)
+
+            cv2.putText(img3,
+                        "{0: .2f}sec {1}count {2} SCORE:{3}".format(self.interval, self.count,
+                                                                    self.odai_list[self.odai_id], self.score),
+                        (20, 40),
+                        fontFace=cv2.FONT_HERSHEY_COMPLEX,
+                        fontScale=0.8, color=(0, 0, 0), thickness=2, lineType=cv2.LINE_4)
+
             # Frame
             cv2.imshow(self.ORG_WINDOW_NAME, img3)
 
@@ -115,6 +119,7 @@ class Main:
 
             # 次のフレーム読み込み
             self.end_flag, self.c_frame = self.cap.read()
+        print(self.score)
 
 
 if __name__ == '__main__':
