@@ -2,6 +2,7 @@ import cv2
 import time
 import random
 import numpy as np
+import os
 from face_emotions import main
 
 """
@@ -21,6 +22,8 @@ from face_emotions import main
 
 class Main:
     def __init__(self):
+        if not os.path.isdir("image_data"):
+            os.mkdir("image_data")
         self.ESC_KEY = 27
         self.INTERVAL = 33
         self.time_limit = 60
@@ -70,12 +73,13 @@ class Main:
             # 画像の取得と顔の検出
             self.score = round(self.score, 1)
             img = self.c_frame
-            if self.face_flag:
+            if self.face_flag or time.time() - self.last > 5:
                 self.rec = self.make_rectangle()
-                self.face_flag = False
                 self.interval = time.time() - self.last
                 self.last = time.time()
-                self.count += 1
+                if self.face_flag:
+                    self.face_flag = False
+                    self.count += 1
                 """
                 score計算
                 
@@ -86,7 +90,7 @@ class Main:
                 print(self.score)
 
             x, y, w, h = self.rec[0], self.rec[1], self.rec[2], self.rec[3]
-            color = (0, 255, 255) if self.odai_id != 0 else (128, 128, 128)
+            color = (0, 255, 255) if self.odai_id != 0 else (0, 240, 128)
             image_display, face_list = self.detection(img)
 
             cv2.rectangle(image_display, (x, y), (w, h), color, thickness=3)
@@ -100,8 +104,8 @@ class Main:
                     """
                     file = "image_data/image.jpg"
                     # print(np.array(img2).shape)
-                    save = np.array(img)[face_list[0][1]+5:face_list[0][1] + face_list[0][3]-5,
-                                         face_list[0][0]+5:face_list[0][0] + face_list[0][2]-5, :]
+                    save = np.array(img)[face_list[0][1] + 5:face_list[0][1] + face_list[0][3] - 5,
+                                         face_list[0][0] + 5:face_list[0][0] + face_list[0][2] - 5, :]
                     # print(save.shape)
                     # save
                     cv2.imwrite(file, save)
@@ -116,17 +120,19 @@ class Main:
             image_display = cv2.flip(image_display, 1)
 
             cv2.putText(image_display,
-                        "{0: .2f}sec {1}count {2} SCORE:{3}".format(self.interval, self.count,
-                                                                    self.odai_list[self.odai_id], self.score),
+                        "Time Limit{0: .2f}sec Count:{1} {2} SCORE:{3}".format(
+                            self.time_limit - (time.time() - self.time_1), self.count,
+                            self.odai_list[self.odai_id], self.score),
                         (20, 40),
                         fontFace=cv2.FONT_HERSHEY_COMPLEX,
-                        fontScale=0.8, color=(0, 0, 0), thickness=2, lineType=cv2.LINE_4)
+                        fontScale=0.6, color=(0, 0, 0), thickness=2, lineType=cv2.LINE_4)
 
             # Frame
             cv2.imshow(self.ORG_WINDOW_NAME, image_display)
 
             # Escキーで終了 or Time Limit
             key = cv2.waitKey(self.INTERVAL)
+            # print(time.time() - self.time_1)
             if key == self.ESC_KEY or time.time() - self.time_1 > self.time_limit:
                 break
 
