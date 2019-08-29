@@ -66,7 +66,7 @@ class Main:
         while self.end_flag:
             # 画像の取得と顔の検出
             self.score = round(self.score, 1)
-            img2 = self.c_frame
+            img = self.c_frame
             if self.face_flag:
                 self.rec = make(self.height, self.width)
                 self.face_flag = False
@@ -78,9 +78,9 @@ class Main:
 
             x, y, w, h = self.rec[0], self.rec[1], self.rec[2], self.rec[3]
             color = (0, 255, 255) if self.odai_id != 0 else (128, 128, 128)
-            img3, face_list = detection(img2, self.cascade)
+            image_display, face_list = detection(img, self.cascade)
 
-            cv2.rectangle(img2, (x, y), (w, h), color, thickness=3)
+            cv2.rectangle(image_display, (x, y), (w, h), color, thickness=3)
             # print(face_list)
             if len(face_list) != 0:
                 # print(x, y, w, h)
@@ -89,8 +89,8 @@ class Main:
 
                     file = "image_data/image.jpg"
                     # print(np.array(img2).shape)
-                    save = np.array(img2)[face_list[0][1]:face_list[0][1] + face_list[0][3],
-                                          face_list[0][0]:face_list[0][0] + face_list[0][2], :]
+                    save = np.array(img)[face_list[0][1]+5:face_list[0][1] + face_list[0][3]-5,
+                                          face_list[0][0]+5:face_list[0][0] + face_list[0][2]-5, :]
                     # print(save.shape)
                     cv2.imwrite(file, save)
                     predict, ps = main()
@@ -99,9 +99,9 @@ class Main:
                         self.odai_id = random.choice(self.odai_idx)
                         # self.odai = self.odai_list[self.odai_id]
 
-            img3 = cv2.flip(img3, 1)
+            image_display = cv2.flip(image_display, 1)
 
-            cv2.putText(img3,
+            cv2.putText(image_display,
                         "{0: .2f}sec {1}count {2} SCORE:{3}".format(self.interval, self.count,
                                                                     self.odai_list[self.odai_id], self.score),
                         (20, 40),
@@ -109,7 +109,7 @@ class Main:
                         fontScale=0.8, color=(0, 0, 0), thickness=2, lineType=cv2.LINE_4)
 
             # Frame
-            cv2.imshow(self.ORG_WINDOW_NAME, img3)
+            cv2.imshow(self.ORG_WINDOW_NAME, image_display)
 
             # Escキーで終了 or Time Limit
             key = cv2.waitKey(self.INTERVAL)
