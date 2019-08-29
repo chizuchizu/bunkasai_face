@@ -13,7 +13,6 @@ from face_emotions import main
         memo = self._print_prediction(prediction[0])  # add
         return memo  # add
 60行目をコメントアウトし、後ろの2行を追加。
-
 113行目に
         return [str(dominant_emotion), normalized_prediction[self.emotion_map[emotion]] * 100]
 を追加。
