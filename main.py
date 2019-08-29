@@ -2,8 +2,6 @@ import cv2
 import time
 import random
 import numpy as np
-from face_detection import detection
-from make_rectangle import make
 from face_emotions import main
 
 """
@@ -54,6 +52,8 @@ class Main:
         self.face_flag = True
 
         self.rec = None
+        # 対象の矩形のサイズ
+        self.rectangle_size = 200
 
         self.time_1 = time.time()
         self.last = self.time_1
@@ -71,7 +71,7 @@ class Main:
             self.score = round(self.score, 1)
             img = self.c_frame
             if self.face_flag:
-                self.rec = make(self.height, self.width)
+                self.rec = self.make_rectangle()
                 self.face_flag = False
                 self.interval = time.time() - self.last
                 self.last = time.time()
@@ -87,7 +87,7 @@ class Main:
 
             x, y, w, h = self.rec[0], self.rec[1], self.rec[2], self.rec[3]
             color = (0, 255, 255) if self.odai_id != 0 else (128, 128, 128)
-            image_display, face_list = detection(img, self.cascade)
+            image_display, face_list = self.detection(img)
 
             cv2.rectangle(image_display, (x, y), (w, h), color, thickness=3)
             # print(face_list)
@@ -133,6 +133,22 @@ class Main:
             # 次のフレーム読み込み
             self.end_flag, self.c_frame = self.cap.read()
         print(self.score)
+
+    def make_rectangle(self):
+        h = random.randint(0, self.width - self.rectangle_size)
+        w = random.randint(0, self.height - self.rectangle_size)
+        return [h, w, h + self.rectangle_size, w + self.rectangle_size]
+
+    def detection(self, img, color=(128, 0, 0)):
+        img_gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
+        face_list = self.cascade.detectMultiScale(img_gray, minSize=(100, 100))
+        # print(face_list)
+        # 検出した顔に印を付ける
+        for (x, y, w, h) in face_list:
+            pen_w = 3
+            cv2.rectangle(img, (x, y), (x + w, y + h), color, thickness=pen_w)
+
+        return img, face_list
 
 
 if __name__ == '__main__':
