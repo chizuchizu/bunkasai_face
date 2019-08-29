@@ -18,7 +18,7 @@
 * cv2(OpenCV)
 * TensorFlow(Kerasも含める)
 
-1. EmoPyのコードの変更  
+### 【重要】EmoPyのコードの変更  
 予測値が返ってくるように少し改良させる。ファイルパスは環境によって異なるが、anacondaを使っている場合は下のパス通りのところにあるはず。
 >"
 /home/username/anaconda3/envs/deep36/lib/python3.6/site-packages/EmoPy/src/fermodel.py  
@@ -33,6 +33,3 @@
 実行結果が返ってくるように改良した。"  
 
 main.pyから引用  
-2.main.pyの実行
-実行するとWebカメラが映している映像が流れているタブが出てくる。  
-起動したらゲーム開始
