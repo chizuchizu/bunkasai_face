@@ -78,7 +78,7 @@ class Main:
                 print(self.score)
 
             x, y, w, h = self.rec[0], self.rec[1], self.rec[2], self.rec[3]
-            color = (0, 255, 255)if self.odai_id != 0 else (128, 128, 128)
+            color = (0, 255, 255) if self.odai_id != 0 else (128, 128, 128)
             img3, face_list = detection(img2, self.cascade)
 
             cv2.rectangle(img2, (x, y), (w, h), color, thickness=3)
@@ -91,7 +91,7 @@ class Main:
                     file = "image_data/image.jpg"
                     # print(np.array(img2).shape)
                     save = np.array(img2)[face_list[0][1]:face_list[0][1] + face_list[0][3],
-                           face_list[0][0]:face_list[0][0] + face_list[0][2], :]
+                                          face_list[0][0]:face_list[0][0] + face_list[0][2], :]
                     # print(save.shape)
                     cv2.imwrite(file, save)
                     predict, ps = main()
