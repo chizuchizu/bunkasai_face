@@ -36,9 +36,11 @@ class Main:
         self.ORG_WINDOW_NAME = "org"
         self.DEVICE_ID = 0
 
+        # 顔の分類モデル(OpenCV)
         self.cascade_file = "haarcascade_frontalface_alt.xml"
         self.cascade = cv2.CascadeClassifier(self.cascade_file)
 
+        # Web camera
         self.cap = cv2.VideoCapture(self.DEVICE_ID)
 
         # 初期フレームの読込
@@ -51,11 +53,12 @@ class Main:
         # flag
         self.face_flag = True
 
-        self.rec = make(self.height, self.width)
+        self.rec = None
 
         self.time_1 = time.time()
         self.last = self.time_1
 
+        # 1回目、お題が作られるときにカウントされるため-1にしている
         self.count = -1
         self.interval = 0
 
@@ -73,7 +76,13 @@ class Main:
                 self.interval = time.time() - self.last
                 self.last = time.time()
                 self.count += 1
-                self.score += round(self.interval * (ps - 40), 1)
+                """
+                score計算
+                
+                (5 - インターバル（矩形が表示されてからクリアするまでの時間） * (表情の予測割合（%） - 40)
+                5秒経ったら勝手に別のお題になる仕組みになっています。
+                """
+                self.score += round((5 - self.interval) * (ps - 40), 1)
                 print(self.score)
 
             x, y, w, h = self.rec[0], self.rec[1], self.rec[2], self.rec[3]
@@ -86,13 +95,18 @@ class Main:
                 # print(x, y, w, h)
                 if face_list[0][0] > x and face_list[0][1] > y and face_list[0][2] + face_list[0][0] < w \
                         and face_list[0][3] + face_list[0][1] < h:
-
+                    """
+                    顔の画像を切り取り、image_data/image.jpgに保存する
+                    """
                     file = "image_data/image.jpg"
                     # print(np.array(img2).shape)
                     save = np.array(img)[face_list[0][1]+5:face_list[0][1] + face_list[0][3]-5,
-                                          face_list[0][0]+5:face_list[0][0] + face_list[0][2]-5, :]
+                                         face_list[0][0]+5:face_list[0][0] + face_list[0][2]-5, :]
                     # print(save.shape)
+                    # save
                     cv2.imwrite(file, save)
+
+                    # predict emotion
                     predict, ps = main()
                     if self.odai_pred[self.odai_id] == predict:
                         self.face_flag = True
@@ -122,5 +136,5 @@ class Main:
 
 
 if __name__ == '__main__':
-    a = Main()
-    a.loop()
+    main_loop = Main()
+    main_loop.loop()
