@@ -5,6 +5,7 @@ import tensorflow as tf
 
 # https://github.com/thoughtworksarts/EmoPy
 
+# TensorFlowをCPUで使用している場合は以下の7行(set_sessionまで)をコメントアウトして実行してください。
 config = tf.ConfigProto(
     gpu_options=tf.GPUOptions(
         visible_device_list="0",  # specify GPU number
