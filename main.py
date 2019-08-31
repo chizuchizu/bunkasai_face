@@ -32,7 +32,6 @@ class Main:
         self.odai_pred = ['anger', 'happiness']
         self.odai_list = ["Angry", "Happy"]
         self.odai_id = random.choice(self.odai_idx)
-        # self.odai = random.choice(self.odai_list)
 
         self.ORG_WINDOW_NAME = "org"
         self.DEVICE_ID = 0
