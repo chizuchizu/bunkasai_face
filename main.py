@@ -133,6 +133,7 @@ class Main:
             key = cv2.waitKey(self.INTERVAL)
             # print(time.time() - self.time_1)
             if key == self.ESC_KEY or time.time() - self.time_1 > self.time_limit:
+                print("あなたの主観表情力は{}点でした！\nお疲れ様でした".format(self.score))
                 break
 
             # 次のフレーム読み込み
