@@ -14,10 +14,15 @@ CPUでもサクサク動くのでお手軽です。（CPUで動かす場合は�
 * カメラに向かって正面に顔を映さないと認識されないことがあるので正面に立ちましょう
 
 ## 使い方
-### 使用ライブラリ
-* NumPy
-* cv2(OpenCV)
-* TensorFlow(Kerasも含める)
+### 使用環境
+* Python3.6(EmoPyが3.6じゃないと動かない)
+  
+そして、以下のスクリプトをターミナルで実行します。
+```shell script
+pip install EmoPy
+pip uninstall scipy
+pip install scipy==1.1.0
+```
 
 ### 【重要】EmoPyのコードの変更  
 予測値が返ってくるように少し改良させる。ファイルパスは環境によって異なるが、anacondaを使っている場合は下のパス通りのところにあるはず。
