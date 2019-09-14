@@ -18,10 +18,10 @@ CPUでもサクサク動くのでお手軽です。（CPUで動かす場合は�
 * Python3.6(EmoPyが3.6じゃないと動かない)
   
 そして、以下のスクリプトをターミナルで実行します。
-```shell script
-pip install EmoPy
-pip uninstall scipy
-pip install scipy==1.1.0
+```bash
+$ pip install EmoPy
+$ pip uninstall scipy
+$ pip install scipy==1.1.0
 ```
 
 ### 【重要】EmoPyのコードの変更  
