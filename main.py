@@ -37,6 +37,7 @@ class Main:
         self.DEVICE_ID = 0
 
         # 顔の分類モデル(OpenCV)
+        # コマンドラインで動かす場合はここのパスを絶対パスにしてください
         self.cascade_file = "haarcascade_frontalface_alt.xml"
         self.cascade = cv2.CascadeClassifier(self.cascade_file)
 

@@ -54,3 +54,11 @@ config = tf.ConfigProto(
 set_session(tf.Session(config=config))
 ```
 また、複数GPUを使用する場合などはこのvisible_device_listの値を変更するなどしてください。
+
+### コマンドラインで動かす場合
+main.pyの41行目
+```main.py
+self.cascade_file = "haarcascade_frontalface_alt.xml"
+```
+コマンドラインで実行する場合はこのパスを絶対パスにしてください。  
+PyCharm等のIDEで動かすのであればこの相対パスのままで構いません。  
