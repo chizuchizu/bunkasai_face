@@ -28,10 +28,10 @@ class Main:
         self.INTERVAL = 33
         self.time_limit = 60
 
-        self.odai_idx = [0, 1]
-        self.odai_pred = ['anger', 'happiness']
-        self.odai_list = ["Angry", "Happy"]
-        self.odai_id = random.choice(self.odai_idx)
+        self.theme_idx = [0, 1]
+        self.theme_pred = ['anger', 'happiness']
+        self.theme_list = ["Angry", "Happy"]
+        self.theme_id = random.choice(self.theme_idx)
 
         self.ORG_WINDOW_NAME = "org"
         self.DEVICE_ID = 0
@@ -89,7 +89,7 @@ class Main:
                 print(self.score)
 
             x, y, w, h = self.rec[0], self.rec[1], self.rec[2], self.rec[3]
-            color = (0, 255, 255) if self.odai_id != 0 else (0, 240, 128)
+            color = (0, 255, 255) if self.theme_id != 0 else (0, 240, 128)
             image_display, face_list = self.detection(img)
 
             cv2.rectangle(image_display, (x, y), (w, h), color, thickness=3)
@@ -111,17 +111,16 @@ class Main:
 
                     # predict emotion
                     predict, ps = main()
-                    if self.odai_pred[self.odai_id] == predict:
+                    if self.theme_pred[self.theme_id] == predict:
                         self.face_flag = True
-                        self.odai_id = random.choice(self.odai_idx)
-                        # self.odai = self.odai_list[self.odai_id]
+                        self.theme_id = random.choice(self.theme_idx)
 
             image_display = cv2.flip(image_display, 1)
 
             cv2.putText(image_display,
                         "Time Limit{0: .2f}sec Count:{1} {2} SCORE:{3}".format(
                             self.time_limit - (time.time() - self.time_1), self.count,
-                            self.odai_list[self.odai_id], self.score),
+                            self.theme_list[self.theme_id], self.score),
                         (20, 40),
                         fontFace=cv2.FONT_HERSHEY_COMPLEX,
                         fontScale=0.6, color=(0, 0, 0), thickness=2, lineType=cv2.LINE_4)
