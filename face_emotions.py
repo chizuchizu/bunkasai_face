@@ -14,18 +14,17 @@ config = tf.ConfigProto(
 )
 set_session(tf.Session(config=config))
 
-target_cmotions = ['anger', 'happiness']  # 怒り、嬉しい
-model = FERModel(target_cmotions, verbose=True)
+target = ['anger', 'happiness']  # 怒り、嬉しい
+model = FERModel(target, verbose=True)
 file = "image_data/image.jpg"
 
 
 def main():
-    frameString, ps = model.predict(file)
+    res, ps = model.predict(file)
     # print(FERModel)
-    print(frameString, ps)
-    return frameString, round(ps, 1)
+    print(res, ps)
+    return res, round(ps, 1)
 
     # print(FERModel.predict(model, "a"))
     # print(type(frameString))
     # print(str(frameString or "0"))
-
