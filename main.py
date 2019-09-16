@@ -65,7 +65,11 @@ class Main:
         self.count = -1
         self.interval = 0
 
+        # スコア計算については下のほうに
         self.score = 0
+
+        # お名前
+        self.name = input("貴方の名前を教えてください: ")
 
     def loop(self):
         ps = 40
@@ -164,21 +168,20 @@ class Main:
 
     def make_ranking(self):
         ranking_path = "data/ranking.npy"
-        name = input("あなたの名前を教えてください: ")
-        result = np.array([[name, self.score]])
+        result = np.array([[self.name, self.score]])
 
         if not os.path.isfile(ranking_path):
             """Fileが存在しなければ作成"""
             np.save(ranking_path, result)
         else:
             ranking = np.load(ranking_path)
-            result = np.array([[name, self.score]])
+            result = np.array([[self.name, self.score]])
             ranking = np.concatenate([ranking, result])
             # ranking = np.append(ranking, result, axis=0)
             ranking = ranking[np.argsort(ranking[:, 1])[::-1]]
             # print(ranking)
             np.save(ranking_path, ranking)
-        print("{0}さんの瞬間表情力は{1}点でした！\nお疲れ様でした".format(name, self.score))
+        print("{0}さんの瞬間表情力は{1}点でした！\nお疲れ様でした".format(self.name, self.score))
 
 
 if __name__ == '__main__':
