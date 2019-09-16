@@ -37,7 +37,7 @@ class Main:
         self.DEVICE_ID = 0
 
         # 顔の分類モデル(OpenCV)
-        # コマンドラインで動かす場合はここのパスを絶対パスにしてください
+        # コマンドラインで動かす場合はここのパス（相対パス）を絶対パスにしてください
         self.cascade_file = "haarcascade_frontalface_alt.xml"
         self.cascade = cv2.CascadeClassifier(self.cascade_file)
 
@@ -118,6 +118,12 @@ class Main:
 
             image_display = cv2.flip(image_display, 1)
 
+            """
+            上に表示されるバー
+            TimeLimit: float: 残り時間
+            Count: int: 正解数
+            SCORE: float: スコア（点数は上に計算式が載っている）
+            """
             cv2.putText(image_display,
                         "Time Limit{0: .2f}sec Count:{1} {2} SCORE:{3}".format(
                             self.time_limit - (time.time() - self.time_1), self.count,
@@ -133,12 +139,12 @@ class Main:
             key = cv2.waitKey(self.INTERVAL)
             # print(time.time() - self.time_1)
             if key == self.ESC_KEY or time.time() - self.time_1 > self.time_limit:
-                print("あなたの主観表情力は{}点でした！\nお疲れ様でした".format(self.score))
+                self.make_ranking()
                 break
 
             # 次のフレーム読み込み
             self.end_flag, self.c_frame = self.cap.read()
-        print(self.score)
+        # print(self.score)
 
     def make_rectangle(self):
         h = random.randint(0, self.width - self.rectangle_size)
@@ -155,6 +161,24 @@ class Main:
             cv2.rectangle(img, (x, y), (x + w, y + h), color, thickness=pen_w)
 
         return img, face_list
+
+    def make_ranking(self):
+        ranking_path = "data/ranking.npy"
+        name = input("あなたの名前を教えてください: ")
+        result = np.array([[name, self.score]])
+
+        if not os.path.isfile(ranking_path):
+            """Fileが存在しなければ作成"""
+            np.save(ranking_path, result)
+        else:
+            ranking = np.load(ranking_path)
+            result = np.array([[name, self.score]])
+            ranking = np.concatenate([ranking, result])
+            # ranking = np.append(ranking, result, axis=0)
+            ranking = ranking[np.argsort(ranking[:, 1])[::-1]]
+            # print(ranking)
+            np.save(ranking_path, ranking)
+        print("{0}さんの瞬間表情力は{1}点でした！\nお疲れ様でした".format(name, self.score))
 
 
 if __name__ == '__main__':
