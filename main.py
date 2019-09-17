@@ -21,7 +21,21 @@ from face_emotions import main
 
 
 class Main:
-    def __init__(self):
+    def __init__(self, gpu=False):
+        """
+        1.Webカメラがあるかどうか（無いとエラー）
+        2.名前を取得
+        3.Window作成
+
+        2と3を入れ替えるとWindowが引っ込んでしまう
+        :param gpu: TF-gpuかcpuか
+        """
+        # gpuを使用するかしないか
+        if gpu:
+            """gpuを使用する場合はgpuの指定をしなければならないので"""
+            from face_emotions import use_gpu
+            use_gpu()
+
         if not os.path.isdir("image_data"):
             os.mkdir("image_data")
         self.ESC_KEY = 27
@@ -43,6 +57,9 @@ class Main:
 
         # Web camera
         self.cap = cv2.VideoCapture(self.DEVICE_ID)
+
+        # お名前
+        self.name = input("貴方の名前を教えてください: ")
 
         # 初期フレームの読込
         self.end_flag, self.c_frame = self.cap.read()
@@ -68,10 +85,11 @@ class Main:
         # スコア計算については下のほうに
         self.score = 0
 
-        # お名前
-        self.name = input("貴方の名前を教えてください: ")
-
     def loop(self):
+        """
+        mainloop
+        :return: None
+        """
         ps = 40
         while self.end_flag:
             # 画像の取得と顔の検出
@@ -109,7 +127,7 @@ class Main:
                     file = "image_data/image.jpg"
                     # print(np.array(img2).shape)
                     save = np.array(img)[face_list[0][1] + 5:face_list[0][1] + face_list[0][3] - 5,
-                                         face_list[0][0] + 5:face_list[0][0] + face_list[0][2] - 5, :]
+                           face_list[0][0] + 5:face_list[0][0] + face_list[0][2] - 5, :]
                     # print(save.shape)
                     # save
                     cv2.imwrite(file, save)
@@ -150,7 +168,15 @@ class Main:
             self.end_flag, self.c_frame = self.cap.read()
         # print(self.score)
 
+    def tutorial(self):
+        """未定"""
+        return 0
+
     def make_rectangle(self):
+        """
+        ランダムに矩形を生成
+        :return: list: 矩形の4点の座標
+        """
         h = random.randint(0, self.width - self.rectangle_size)
         w = random.randint(0, self.height - self.rectangle_size)
         return [h, w, h + self.rectangle_size, w + self.rectangle_size]
@@ -182,8 +208,3 @@ class Main:
             # print(ranking)
             np.save(ranking_path, ranking)
         print("{0}さんの瞬間表情力は{1}点でした！\nお疲れ様でした".format(self.name, self.score))
-
-
-if __name__ == '__main__':
-    main_loop = Main()
-    main_loop.loop()

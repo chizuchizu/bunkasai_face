@@ -20,6 +20,17 @@ CPUでもサクサク動くのでお手軽です。（CPUで動かす場合は�
 * カメラに向かって正面に顔を映さないと認識されないことがあるので正面に立ちましょう
 
 ## 使い方
+
+### とりあえず実行するには
+1. 環境を整える
+2. EmoPyのコードを少し改良する（下を参考に）
+3. run.pyを実行(TensorFlowがgpu版であればMain()のgpu引数をTrueに、cpu版であればFalse)
+
+### ランキング機能
+np.arrayの2次元配列です。1列目に名前、2列目にスコアが入っていてスコアでソートされるようになっています。  
+csvにしなかったのは余計なライブラリを使いたくなかったからなので、余力があればcsvにしてみてください。（難しくはない）
+
+## その他
 ### 使用環境
 * Python3.6(EmoPyが3.6じゃないと動かない)
   
@@ -46,20 +57,9 @@ $ pip install scipy==1.1.0
 
 main.pyから引用  
 
-### 【注意】CPUで動かす場合
-本アプリケーションはCPUでの動作を確認しております（動作はGPUと変わらないくらい軽い）。  
-CPUで使用する場合は、  
-face_emotions.pyの9行目~15行目の以下のコードをコメントアウトしてから実行してください。
-```face_emotion.py
-config = tf.ConfigProto(
-    gpu_options=tf.GPUOptions(
-        visible_device_list="0",  # specify GPU number
-        allow_growth=True
-    )
-)
-set_session(tf.Session(config=config))
-```
-また、複数GPUを使用する場合などはこのvisible_device_listの値を変更するなどしてください。
+### 【注意】GPUで動かすときは
+run.pyのMain()の引数のgpuをTrueにしてください。
+
 
 ### コマンドラインで動かす場合
 main.pyの41行目
