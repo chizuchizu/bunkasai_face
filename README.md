@@ -57,9 +57,6 @@ $ pip install scipy==1.1.0
 
 main.pyから引用  
 
-### 【注意】GPUで動かすときは
-run.pyのMain()の引数のgpuをTrueにしてください。
-
 
 ### コマンドラインで動かす場合
 main.pyの41行目
