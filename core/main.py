@@ -211,3 +211,8 @@ class Main:
             # print(ranking)
             np.save(ranking_path, ranking)
         print("{0}さんの瞬間表情力は{1}点でした！\nお疲れ様でした".format(self.name, self.score))
+
+
+if __name__ == "__main__":
+    app = Main(gpu=False)
+    app.loop()
