@@ -3,7 +3,7 @@ import time
 import random
 import numpy as np
 import os
-from face_emotions import main
+from core.face_emotions import main
 
 """
 /home/username/anaconda3/envs/deep36/lib/python3.6/site-packages/EmoPy/src/fermodel.py
@@ -33,14 +33,12 @@ class Main:
         # gpuを使用するかしないか
         if gpu:
             """gpuを使用する場合はgpuの指定をしなければならないので"""
-            from face_emotions import use_gpu
+            from core.face_emotions import use_gpu
             use_gpu()
 
-        if not os.path.isdir("image_data"):
-            os.mkdir("image_data")
         self.ESC_KEY = 27
         self.INTERVAL = 33
-        self.time_limit = 60
+        self.time_limit = 60  # seconds
 
         self.theme_idx = [0, 1]
         self.theme_pred = ['anger', 'happiness']
@@ -52,14 +50,15 @@ class Main:
 
         # 顔の分類モデル(OpenCV)
         # コマンドラインで動かす場合はここのパス（相対パス）を絶対パスにしてください
-        self.cascade_file = "haarcascade_frontalface_alt.xml"
+        self.cascade_file = "core/haarcascade_frontalface_alt.xml"
+        # core/haarcascade_frontalface_alt.xml
         self.cascade = cv2.CascadeClassifier(self.cascade_file)
 
         # Web camera
         self.cap = cv2.VideoCapture(self.DEVICE_ID)
 
         # お名前
-        self.name = input("貴方の名前を教えてください: ")
+        self.name = input("あなたの名前を教えてください: ")
 
         # 初期フレームの読込
         self.end_flag, self.c_frame = self.cap.read()
@@ -84,6 +83,10 @@ class Main:
 
         # スコア計算については下のほうに
         self.score = 0
+
+        self.image_path = "core/data/image.jpg"
+        if not os.path.isdir("core/data"):
+            os.mkdir("core/data")
 
     def loop(self):
         """
@@ -122,15 +125,15 @@ class Main:
                 if face_list[0][0] > x and face_list[0][1] > y and face_list[0][2] + face_list[0][0] < w \
                         and face_list[0][3] + face_list[0][1] < h:
                     """
-                    顔の画像を切り取り、image_data/image.jpgに保存する
+                    顔の画像を切り取り、data/image.jpgに保存する
                     """
-                    file = "image_data/image.jpg"
+                    # file = "data/image.jpg"
                     # print(np.array(img2).shape)
                     save = np.array(img)[face_list[0][1] + 5:face_list[0][1] + face_list[0][3] - 5,
                            face_list[0][0] + 5:face_list[0][0] + face_list[0][2] - 5, :]
                     # print(save.shape)
                     # save
-                    cv2.imwrite(file, save)
+                    cv2.imwrite(self.image_path, save)
 
                     # predict emotion
                     predict, ps = main()

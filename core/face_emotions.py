@@ -1,4 +1,10 @@
 from EmoPy.src.fermodel import FERModel
+import os
+
+target = ['anger', 'happiness']  # 怒り、嬉しい
+model = FERModel(target, verbose=True)
+file = "core/data/image.jpg"
+assert os.path.isfile(file)
 
 
 # https://github.com/thoughtworksarts/EmoPy
@@ -21,17 +27,8 @@ def use_gpu():
     set_session(tf.Session(config=config))
 
 
-target = ['anger', 'happiness']  # 怒り、嬉しい
-model = FERModel(target, verbose=True)
-file = "image_data/image.jpg"
-
-
 def main():
+    global file
     res, ps = model.predict(file)
-    # print(FERModel)
     print(res, ps)
     return res, round(ps, 1)
-
-    # print(FERModel.predict(model, "a"))
-    # print(type(frameString))
-    # print(str(frameString or "0"))
