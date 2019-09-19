@@ -196,7 +196,7 @@ class Main:
         return img, face_list
 
     def make_ranking(self):
-        ranking_path = "data/ranking.npy"
+        ranking_path = "core/data/ranking.npy"
         result = np.array([[self.name, self.score]])
 
         if not os.path.isfile(ranking_path):
