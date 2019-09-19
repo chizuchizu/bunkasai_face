@@ -3,6 +3,7 @@ import time
 import random
 import numpy as np
 import os
+import argparse
 from core.face_emotions import main
 
 """
@@ -31,6 +32,10 @@ class Main:
         :param gpu: TF-gpuかcpuか
         """
         # gpuを使用するかしないか
+        self.parser = argparse.ArgumentParser()
+        self.parser.add_argument("-g", "--gpu", action="store_true", help="TF gpu版を使用しているかどうか")
+        self.args = self.parser.parse_args()
+        print(self.args.gpu)
         if gpu:
             """gpuを使用する場合はgpuの指定をしなければならないので"""
             from core.face_emotions import use_gpu
