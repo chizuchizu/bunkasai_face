@@ -56,12 +56,3 @@ $ pip install scipy==1.1.0
 実行結果が返ってくるように改良した。"  
 
 main.pyから引用  
-
-
-### コマンドラインで動かす場合
-main.pyの41行目
-```main.py
-self.cascade_file = "haarcascade_frontalface_alt.xml"
-```
-コマンドラインで実行する場合はこのパスを絶対パスにしてください。  
-PyCharm等のIDEで動かすのであればこの相対パスのままで構いません。  
