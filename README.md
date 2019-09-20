@@ -24,7 +24,17 @@ CPUでもサクサク動くのでお手軽です。（CPUで動かす場合は�
 ### とりあえず実行するには
 1. 環境を整える
 2. EmoPyのコードを少し改良する（下を参考に）
-3. run.pyを実行(TensorFlowがgpu版であればMain()のgpu引数をTrueに、cpu版であればFalse)
+3. main.pyを実行(TensorFlowがgpu版であれば実行時に--gpu又は-gオプションを付ける)
+
+TF cpu版
+```bash
+$ python main.py
+```
+
+TF gpu版
+```bash
+$ python main.py -g
+```
 
 ### ランキング機能
 np.arrayの2次元配列です。1列目に名前、2列目にスコアが入っていてスコアでソートされるようになっています。  

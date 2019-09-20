@@ -22,7 +22,7 @@ from core.face_emotions import main
 
 
 class Main:
-    def __init__(self, gpu=False):
+    def __init__(self):
         """
         1.Webカメラがあるかどうか（無いとエラー）
         2.名前を取得
@@ -218,5 +218,5 @@ class Main:
 
 
 if __name__ == "__main__":
-    app = Main(gpu=False)
+    app = Main()
     app.loop()
