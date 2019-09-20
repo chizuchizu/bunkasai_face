@@ -21,6 +21,14 @@ from core.face_emotions import main
 実行結果が返ってくるように改良した。
 """
 
+parser = argparse.ArgumentParser()
+parser.add_argument("-g", "--gpu", action="store_true", help="TF gpu版を使用しているかどうか")
+args = parser.parse_args()
+if args.gpu:
+    """gpuを使用する場合はgpuの指定をしなければならないので"""
+    from core.face_emotions import use_gpu
+    use_gpu()
+
 
 class Main:
     def __init__(self):
@@ -31,14 +39,6 @@ class Main:
 
         2と3を入れ替えるとWindowが引っ込んでしまう
         """
-        # gpuを使用するかしないか
-        self.parser = argparse.ArgumentParser()
-        self.parser.add_argument("-g", "--gpu", action="store_true", help="TF gpu版を使用しているかどうか")
-        self.args = self.parser.parse_args()
-        if self.args.gpu:
-            """gpuを使用する場合はgpuの指定をしなければならないので"""
-            from core.face_emotions import use_gpu
-            use_gpu()
 
         self.ESC_KEY = 27
         self.INTERVAL = 33
@@ -119,7 +119,7 @@ class Main:
                 5秒経ったら勝手に別のお題になる仕組みになっています。
                 """
                 self.score += round((5 - self.interval) * (ps - 40), 1)
-                print("Your score:" + self.score)
+                print("Your score:" + str(self.score))
 
             x, y, w, h = self.rec[0], self.rec[1], self.rec[2], self.rec[3]
             color = (0, 255, 255) if self.theme_id != 0 else (0, 240, 128)
