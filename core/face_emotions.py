@@ -4,7 +4,7 @@ import os
 target = ['anger', 'happiness']  # 怒り、嬉しい
 model = FERModel(target, verbose=True)
 file = "core/data/image.jpg"
-assert os.path.isfile(file)
+# assert os.path.isfile(file)
 
 
 # https://github.com/thoughtworksarts/EmoPy
