@@ -4,6 +4,7 @@ import random
 import numpy as np
 import os
 import argparse
+from pathlib import Path
 from core.face_emotions import main
 
 """
@@ -29,7 +30,6 @@ class Main:
         3.Window作成
 
         2と3を入れ替えるとWindowが引っ込んでしまう
-        :param gpu: TF-gpuかcpuか
         """
         # gpuを使用するかしないか
         self.parser = argparse.ArgumentParser()
@@ -53,8 +53,12 @@ class Main:
         self.DEVICE_ID = 0
 
         # 顔の分類モデル(OpenCV)
-        # コマンドラインで動かす場合はここのパス（相対パス）を絶対パスにしてください
+
+        # 絶対パスにしようとしたが、駄目だった。相対パスでも動作を動作を確認したので使っていない。
+        # self.cascade_file = Path(__file__).parent / "haarcascade_frontalface_alt.xml"
+        # self.cascade_file = cv2.data.haarcascades + "core/haarcascade_frontalface_alt.xml"
         self.cascade_file = "core/haarcascade_frontalface_alt.xml"
+        print(self.cascade_file)
         # core/haarcascade_frontalface_alt.xml
         self.cascade = cv2.CascadeClassifier(self.cascade_file)
 
@@ -89,8 +93,9 @@ class Main:
         self.score = 0
 
         self.image_path = "core/data/image.jpg"
-        if not os.path.isdir("core/data"):
-            os.mkdir("core/data")
+        print(os.path.isfile(Path(__file__).parent / "core/data/image.jpg"))
+        if not os.path.isdir(Path(__file__).parent / "core/data"):
+            os.mkdir(Path(__file__).parent / "core/data")
 
     def loop(self):
         """
