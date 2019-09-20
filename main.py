@@ -58,7 +58,6 @@ class Main:
         # self.cascade_file = Path(__file__).parent / "haarcascade_frontalface_alt.xml"
         # self.cascade_file = cv2.data.haarcascades + "core/haarcascade_frontalface_alt.xml"
         self.cascade_file = "core/haarcascade_frontalface_alt.xml"
-        print(self.cascade_file)
         # core/haarcascade_frontalface_alt.xml
         self.cascade = cv2.CascadeClassifier(self.cascade_file)
 
@@ -93,7 +92,6 @@ class Main:
         self.score = 0
 
         self.image_path = "core/data/image.jpg"
-        print(os.path.isfile(Path(__file__).parent / "core/data/image.jpg"))
         if not os.path.isdir(Path(__file__).parent / "core/data"):
             os.mkdir(Path(__file__).parent / "core/data")
 
@@ -121,7 +119,7 @@ class Main:
                 5秒経ったら勝手に別のお題になる仕組みになっています。
                 """
                 self.score += round((5 - self.interval) * (ps - 40), 1)
-                print(self.score)
+                print("Your score:" + self.score)
 
             x, y, w, h = self.rec[0], self.rec[1], self.rec[2], self.rec[3]
             color = (0, 255, 255) if self.theme_id != 0 else (0, 240, 128)

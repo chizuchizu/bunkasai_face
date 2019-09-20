@@ -1,5 +1,5 @@
 from EmoPy.src.fermodel import FERModel
-import os
+# import os
 
 target = ['anger', 'happiness']  # 怒り、嬉しい
 model = FERModel(target, verbose=True)
@@ -28,7 +28,6 @@ def use_gpu():
 
 
 def main():
-    global file
     res, ps = model.predict(file)
     print(res, ps)
     return res, round(ps, 1)
